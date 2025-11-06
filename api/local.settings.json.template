@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "DATABASE_URL": "sqlserver://USER:PASSWORD@HOST:1433;database=DBNAME;encrypt=true",
+    "AI_SERVICE_ENDPOINT": "",
+    "AI_SERVICE_KEY": "",
+    "JWT_AUDIENCE": "",
+    "JWT_ISSUER": "",
+    "CORS_ORIGINS": "http://localhost:3000"
+  }
+}

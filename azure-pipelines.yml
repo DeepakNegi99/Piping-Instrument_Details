@@ -1,0 +1,61 @@
+# Azure DevOps multi-stage pipeline for client (React) and api (Azure Functions)
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Build
+    displayName: Build & Test
+    jobs:
+      - job: Client
+        displayName: Client build
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '18.x'
+          - script: |
+              cd client
+              npm ci
+              npm run lint --if-present
+              npm test --if-present -- --ci --watchAll=false
+              npm run build
+            displayName: Install, Lint, Test, Build (client)
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: 'client/build'
+              ArtifactName: 'client_build'
+              publishLocation: 'Container'
+
+      - job: Api
+        displayName: API build
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '18.x'
+          - script: |
+              cd api
+              npm ci
+              npm run lint --if-present
+              npm test --if-present -- --ci
+              npm run build
+            displayName: Install, Lint, Test, Build (api)
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: 'api/dist'
+              ArtifactName: 'api_dist'
+              publishLocation: 'Container'
+
+  # Optional deployment stages require service connections and variables
+  - stage: Deploy
+    displayName: Deploy (placeholder)
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables['EnableDeploy'], 'true'))
+    jobs:
+      - job: Placeholder
+        steps:
+          - script: echo "Add deployment tasks for Static Web Apps / Azure Functions here."
+            displayName: Placeholder deployment step
