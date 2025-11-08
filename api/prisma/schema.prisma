@@ -51,6 +51,11 @@ model Request {
   createdBy    User?         @relation(fields: [createdById], references: [id])
   createdById  String?       @db.UniqueIdentifier
   comments     RequestComment[]
+  // Relation to Instrument (optional) to satisfy Instrument.requests back-relation
+  instrument   Instrument?   @relation(fields: [instrumentId], references: [id])
+  instrumentId String?       @db.UniqueIdentifier
+  // Back-relation for WorkflowStep.request
+  workflowSteps WorkflowStep[]
 }
 
 model RequestComment {

@@ -32,3 +32,4 @@ api/local.settings.json
 # Prisma
 api/prisma/*.db
 api/prisma/migrations/
+api/.env.example
